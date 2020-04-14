@@ -84,7 +84,7 @@ class Impact
         $this->hospitalBedsByRequestedTime = floor(.35 * $data->totalHospitalBeds) - $this->severeCasesByRequestedTime;
         $this->casesForICUByRequestedTime = floor(.05 * $this->infectionsByRequestedTime);
         $this->casesForVentilatorsByRequestedTime = floor(.02 * $this->infectionsByRequestedTime);
-        $this->dollarsInFlight = floor($data->region->avgDailyIncomeInUSD * $data->avgDailyIncomePopulation *
+        $this->dollarsInFlight = floor($data->region->avgDailyIncomeInUSD * $data->region->avgDailyIncomePopulation *
             $this->infectionsByRequestedTime / $days);
     }
 
@@ -119,7 +119,7 @@ class SevereImpact
         $this->hospitalBedsByRequestedTime = floor(.35 * $data->totalHospitalBeds) - $this->severeCasesByRequestedTime;
         $this->casesForICUByRequestedTime = floor(.05 * $this->infectionsByRequestedTime);
         $this->casesForVentilatorsByRequestedTime = floor(.02 * $this->infectionsByRequestedTime);
-        $this->dollarsInFlight = floor($data->region->avgDailyIncomeInUSD * $data->avgDailyIncomePopulation *
+        $this->dollarsInFlight = floor($data->region->avgDailyIncomeInUSD * $data->region->avgDailyIncomePopulation *
             $this->infectionsByRequestedTime / $days);
     }
 
