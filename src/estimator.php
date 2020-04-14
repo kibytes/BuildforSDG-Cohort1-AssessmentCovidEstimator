@@ -72,6 +72,8 @@ class Impact
     var $severeCasesByRequestedTime;
     var $hospitalBedsByRequestedTime;
     var $casesForICUByRequestedTime;
+    var $casesForVentilatorsByRequestedTime;
+    var $dollarsInFlight;
 
     function __construct($data)
     {
