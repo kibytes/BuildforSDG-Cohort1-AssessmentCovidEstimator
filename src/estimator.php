@@ -88,12 +88,16 @@ class SevereImpact
 {
     var $currentlyInfected;
     var $infectionsByRequestedTime;
+    var $severeCasesByRequestedTime;
+    var $hospitalBedsByRequestedTime;
 
     function __construct($data)
     {
         $days = normalizePeriod($data->timeToElapse, $data->periodType);
         $this->currentlyInfected = $data->reportedCases * 50;
         $this->infectionsByRequestedTime = $this->currentlyInfected * (2 ** floor($days / 3));
+        $this->severeCasesByRequestedTime = floor(.15 * $this->infectionsByRequestedTime);
+        $this->hospitalBedsByRequestedTime = .35 * $data->totalHospitalBeds - $this->severeCasesByRequestedTime;
     }
 
     function getData()
