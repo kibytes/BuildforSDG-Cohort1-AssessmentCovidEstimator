@@ -7,8 +7,7 @@ function covid19ImpactEstimator($data)
     $e_severeImpact = new SevereImpact($d_estimator);
     $output = array("data"=>$d_estimator->getData(),
         "impact"=>$e_impact->getData(),
-        "severeImpact"=>$e_severeImpact->getData(),
-        "severeCasesByRequestedTime"=>$e_severeImpact->severeCasesByRequestedTime);
+        "severeImpact"=>$e_severeImpact->getData());
 
     $data = $output;
     return $data;
@@ -103,8 +102,8 @@ class SevereImpact
         $days = normalizePeriod($data->timeToElapse, $data->periodType);
         $this->currentlyInfected = $data->reportedCases * 50;
         $this->infectionsByRequestedTime = $this->currentlyInfected * (2 ** floor($days / 3));
-        $this->severeCasesByRequestedTime = floor(.15 * $this->infectionsByRequestedTime);
-        $this->hospitalBedsByRequestedTime = floor(.35 * $data->totalHospitalBeds - $this->severeCasesByRequestedTime);
+        $this->severeCasesByRequestedTime = floor((.15 * $this->infectionsByRequestedTime));
+        $this->hospitalBedsByRequestedTime = floor(((.35 * $data->totalHospitalBeds) - $this->severeCasesByRequestedTime));
     }
 
     function getData()
