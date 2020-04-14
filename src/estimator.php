@@ -103,7 +103,9 @@ class SevereImpact
     function getData()
     {
         return array("currentlyInfected"=>$this->currentlyInfected,
-            "infectionsByRequestedTime"=>$this->infectionsByRequestedTime);
+            "infectionsByRequestedTime"=>$this->infectionsByRequestedTime,
+            "severeCasesByRequestedTime"=>$this->severeCasesByRequestedTime,
+            "hospitalBedsByRequestedTime"=>$this->hospitalBedsByRequestedTime);
     }
 }
 
