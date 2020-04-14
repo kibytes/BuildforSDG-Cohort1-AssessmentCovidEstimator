@@ -2,14 +2,14 @@
 
 function covid19ImpactEstimator($data)
 {
-    $d_estimator = new Estimator(json_decode($data));
+    $d_estimator = new Estimator($data);
     $e_impact = new Impact($d_estimator);
     $e_severeImpact = new SevereImpact($d_estimator);
-    $output = (object)[];
-    $output->data = $d_estimator;
-    $output->impact = $e_impact;
-    $output->severeImpact = $e_severeImpact;
-    $data = json_encode($output);
+    $output = array("data"=>$d_estimator->getData(),
+        "impact"=>$e_impact->getData(),
+        "severeImpact"=>$e_severeImpact->getData());
+
+    $data = $output;
     return $data;
 }
 
@@ -24,12 +24,22 @@ class Estimator
 
     function __construct($JSONObject)
     {
-        $this->region = new Region($JSONObject->region);
-        $this->periodType = $JSONObject->periodType;
-        $this->timeToElapse = $JSONObject->timeToElapse;
-        $this->reportedCases = $JSONObject->reportedCases;
-        $this->population = $JSONObject->population;
-        $this->totalHospitalBeds = $JSONObject->totalHospitalBeds;
+        $this->region = new Region($JSONObject["region"]);
+        $this->periodType = $JSONObject["periodType"];
+        $this->timeToElapse = $JSONObject["timeToElapse"];
+        $this->reportedCases = $JSONObject["reportedCases"];
+        $this->population = $JSONObject["population"];
+        $this->totalHospitalBeds = $JSONObject["totalHospitalBeds"];
+    }
+
+    function getData()
+    {
+        return array("region"=>$this->region->getData(),
+            "periodType"=>$this->periodType,
+            "timeToElapse"=>$this->timeToElapse,
+            "reportedCases"=>$this->reportedCases,
+            "population"=>$this->population,
+            "totalHospitalBeds"=>$this->totalHospitalBeds);
     }
 }
 
@@ -42,10 +52,16 @@ class Region
 
     function __construct($obj)
     {
-        $this->name = $obj->name;
-        $this->avgAge = $obj->avgAge;
-        $this->avgDailyIncomeInUSD = $obj->avgDailyIncomeInUSD;
-        $this->avgDailyIncomePopulation = $obj->avgDailyIncomePopulation;
+        $this->name = $obj["name"];
+        $this->avgAge = $obj["avgAge"];
+        $this->avgDailyIncomeInUSD = $obj["avgDailyIncomeInUSD"];
+        $this->avgDailyIncomePopulation = $obj["avgDailyIncomePopulation"];
+    }
+
+    function getData()
+    {
+        return array("name"=>$this->name, "avgAge"=>$this->avgAge, "avgDailyIncomeInUSD"=>$this->avgDailyIncomeInUSD,
+            "avgDailyIncomePopulation"=>$this->avgDailyIncomePopulation);
     }
 }
 
@@ -60,6 +76,12 @@ class Impact
         $this->currentlyInfected = $data->reportedCases * 10;
         $this->infectionsByRequestedTime = $this->currentlyInfected * (2 ** floor($days / 3));
     }
+
+    function getData()
+    {
+        return array("currentlyInfected"=>$this->currentlyInfected,
+            "infectionsByRequestedTime"=>$this->infectionsByRequestedTime);
+    }
 }
 
 class SevereImpact
@@ -72,6 +94,12 @@ class SevereImpact
         $days = normalizePeriod($data->timeToElapse, $data->periodType);
         $this->currentlyInfected = $data->reportedCases * 50;
         $this->infectionsByRequestedTime = $this->currentlyInfected * (2 ** floor($days / 3));
+    }
+
+    function getData()
+    {
+        return array("currentlyInfected"=>$this->currentlyInfected,
+            "infectionsByRequestedTime"=>$this->infectionsByRequestedTime);
     }
 }
 
