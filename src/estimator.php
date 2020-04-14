@@ -7,7 +7,8 @@ function covid19ImpactEstimator($data)
     $e_severeImpact = new SevereImpact($d_estimator);
     $output = array("data"=>$d_estimator->getData(),
         "impact"=>$e_impact->getData(),
-        "severeImpact"=>$e_severeImpact->getData());
+        "severeImpact"=>$e_severeImpact->getData(),
+        "severeCasesByRequestedTime"=>$e_severeImpact->severeCasesByRequestedTime);
 
     $data = $output;
     return $data;
@@ -103,7 +104,7 @@ class SevereImpact
         $this->currentlyInfected = $data->reportedCases * 50;
         $this->infectionsByRequestedTime = $this->currentlyInfected * (2 ** floor($days / 3));
         $this->severeCasesByRequestedTime = floor(.15 * $this->infectionsByRequestedTime);
-        $this->hospitalBedsByRequestedTime = .35 * $data->totalHospitalBeds - $this->severeCasesByRequestedTime;
+        $this->hospitalBedsByRequestedTime = floor(.35 * $data->totalHospitalBeds - $this->severeCasesByRequestedTime);
     }
 
     function getData()
@@ -128,27 +129,3 @@ function normalizePeriod($time, $periodType)
     }
     return $days;
 }
-
-
-//$myRegion = (object)[];
-//
-//$myRegion->name = "Africa";
-//$myRegion->avgAge = 19.7;
-//$myRegion->avgDailyIncomeInUSD = 5;
-//$myRegion->avgDailyIncomePopulation = 0.71;
-//
-//$obj = (object)[];
-//
-//$obj->region = $myRegion;
-//$obj->periodType = "days";
-//$obj->timeToElapse = 58;
-//$obj->reportedCases = 674;
-//$obj->population = 66622705;
-//$obj->totalHospitalBeds = 1380614;
-//
-//echo (covid19ImpactEstimator(json_encode($obj)));
-
-//echo("</br>");
-//echo(6740 * 2 ** floor(58/3));
-
-//echo $obj->name;
